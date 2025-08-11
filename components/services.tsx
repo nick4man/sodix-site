@@ -5,20 +5,7 @@ import { getDictionary } from "@/lib/dictionary";
 
 export const Services = async ({ lang }: { lang: string }) => {
     const dictionary = await getDictionary(lang);
-    const services = [
-        {
-            title: dictionary.services.web.title,
-            description: dictionary.services.web.description
-        },
-        {
-            title: dictionary.services.mobile.title,
-            description: dictionary.services.mobile.description
-        },
-        {
-            title: dictionary.services.design.title,
-            description: dictionary.services.design.description
-        }
-    ]
+    const services = Object.values(dictionary.services).slice(1);
 
     return (
         <section className="container py-12">

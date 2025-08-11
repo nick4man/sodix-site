@@ -4,27 +4,51 @@
         "services": "Services",
         "contacts": "Contacts"
     },
-    "banner": {
+    "hero": {
         "title": "Sodix",
-        "subtitle": "Your partner in software development"
+        "subtitle": "Professional solutions in the field of zero-cycle construction"
     },
     "about": {
         "title": "About Us",
-        "text": "Sodix is a software development company that specializes in building modern and responsive websites and mobile applications. We also offer UI/UX design services to help you create beautiful and user-friendly interfaces."
+        "text": "Sodix is a construction company with a wide range of services and an impressive portfolio of large-scale projects. The company was founded by experienced professionals and has its own fleet of specialized equipment, which has allowed it to implement a number of major projects throughout the Russian Federation."
     },
     "services": {
         "title": "Our Services",
-        "web": {
-            "title": "Web Development",
-            "description": "We build modern and responsive websites."
+        "sheet_piling": {
+            "title": "Sheet Piling",
+            "description": "Installation of sheet pile fences of any complexity."
         },
-        "mobile": {
-            "title": "Mobile Development",
-            "description": "We build cross-platform mobile applications."
+        "slurry_wall": {
+            "title": "Slurry Wall",
+            "description": "Construction of \"slurry walls\" for foundations and enclosures."
         },
-        "design": {
-            "title": "UI/UX Design",
-            "description": "We design beautiful and user-friendly interfaces."
+        "bored_piles": {
+            "title": "Bored Piles",
+            "description": "Installation of bored piles for deep foundations."
+        },
+        "sfa_piles": {
+            "title": "SFA Piles",
+            "description": "Installation of SFA (Starsol) piles."
+        },
+        "concrete_piles": {
+            "title": "Reinforced Concrete Piles",
+            "description": "Immersion of reinforced concrete piles."
+        },
+        "metal_structures": {
+            "title": "Metal Structures",
+            "description": "Installation and dismantling of metal structures of any complexity."
+        },
+        "barrettes": {
+            "title": "Barrettes",
+            "description": "Creation of barrettes (slurry foundations)."
+        },
+        "jet_piles": {
+            "title": "Jet Piles",
+            "description": "Installation of jet piles for soil stabilization."
+        },
+        "anchor_systems": {
+            "title": "Anchor Systems",
+            "description": "Creation of anchor systems for retaining structures."
         }
     },
     "contacts": {

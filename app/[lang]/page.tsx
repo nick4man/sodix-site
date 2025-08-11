@@ -6,7 +6,7 @@ import { Contacts } from "@/components/contacts";
 export default async function Home({ params: { lang } }: { params: { lang: string } }) {
   return (
     <main>
-      <Hero />
+      <Hero lang={lang} />
       <About lang={lang} />
       <Services lang={lang} />
       <Contacts lang={lang} />
