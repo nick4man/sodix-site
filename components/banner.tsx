@@ -1,7 +1,8 @@
-
 import { MotionDiv } from "./motion"
+import { getDictionary } from "@/lib/dictionary";
 
-export const Banner = () => {
+export const Banner = async ({ lang }: { lang: string }) => {
+    const dictionary = await getDictionary(lang);
     return (
         <section
             className="relative h-[560px] bg-cover bg-center flex items-center justify-center text-white"
@@ -14,8 +15,8 @@ export const Banner = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
             >
-                <h1 className="text-5xl font-bold">Sodix</h1>
-                <p className="text-xl mt-4">Your partner in software development</p>
+                <h1 className="text-5xl font-bold">{dictionary.banner.title}</h1>
+                <p className="text-xl mt-4">{dictionary.banner.subtitle}</p>
             </MotionDiv>
         </section>
     )

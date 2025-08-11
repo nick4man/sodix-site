@@ -3,5 +3,37 @@
         "about": "About",
         "services": "Services",
         "contacts": "Contacts"
+    },
+    "banner": {
+        "title": "Sodix",
+        "subtitle": "Your partner in software development"
+    },
+    "about": {
+        "title": "About Us",
+        "text": "Sodix is a software development company that specializes in building modern and responsive websites and mobile applications. We also offer UI/UX design services to help you create beautiful and user-friendly interfaces."
+    },
+    "services": {
+        "title": "Our Services",
+        "web": {
+            "title": "Web Development",
+            "description": "We build modern and responsive websites."
+        },
+        "mobile": {
+            "title": "Mobile Development",
+            "description": "We build cross-platform mobile applications."
+        },
+        "design": {
+            "title": "UI/UX Design",
+            "description": "We design beautiful and user-friendly interfaces."
+        }
+    },
+    "contacts": {
+        "title": "Contact Us",
+        "form": {
+            "name": "Name",
+            "email": "Email",
+            "message": "Message",
+            "send": "Send"
+        }
     }
 }

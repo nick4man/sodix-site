@@ -1,25 +1,28 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MotionDiv } from "./motion";
+import { getDictionary } from "@/lib/dictionary";
 
-const services = [
-    {
-        title: "Web Development",
-        description: "We build modern and responsive websites."
-    },
-    {
-        title: "Mobile Development",
-        description: "We build cross-platform mobile applications."
-    },
-    {
-        title: "UI/UX Design",
-        description: "We design beautiful and user-friendly interfaces."
-    }
-]
+export const Services = async ({ lang }: { lang: string }) => {
+    const dictionary = await getDictionary(lang);
+    const services = [
+        {
+            title: dictionary.services.web.title,
+            description: dictionary.services.web.description
+        },
+        {
+            title: dictionary.services.mobile.title,
+            description: dictionary.services.mobile.description
+        },
+        {
+            title: dictionary.services.design.title,
+            description: dictionary.services.design.description
+        }
+    ]
 
-export const Services = () => {
     return (
         <section className="container py-12">
-            <h2 className="text-3xl font-bold text-center mb-8">Our Services</h2>
+            <h2 className="text-3xl font-bold text-center mb-8">{dictionary.services.title}</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {services.map((service, index) => (
                     <MotionDiv
