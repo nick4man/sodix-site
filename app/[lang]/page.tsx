@@ -1,13 +1,9 @@
-
-import { getDictionary } from "@/lib/dictionary";
-import { Header } from "@/components/header";
+import { Banner } from "@/components/banner";
 
 export default async function Home({ params: { lang } }: { params: { lang: string } }) {
-  const dictionary = await getDictionary(lang);
-
   return (
     <main>
-      <Header dictionary={dictionary} />
+      <Banner />
     </main>
   );
 }

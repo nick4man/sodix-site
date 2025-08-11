@@ -1,11 +1,7 @@
-
-import { getDictionary } from "@/lib/dictionary";
-import { MainNav } from "./main-nav";
-
-export const Header = async ({ dictionary }: { dictionary: Awaited<ReturnType<typeof getDictionary>> }) => {
+export const Header = () => {
     return (
         <header className="bg-gray-800 text-white p-4">
-            <MainNav dictionary={dictionary} />
+            <h1 className="text-2xl font-bold">Header</h1>
         </header>
     )
 }

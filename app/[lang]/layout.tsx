@@ -1,5 +1,6 @@
-
-import { ThemeProvider } from "@/components/theme-provider"
+import { SiteHeader } from "@/components/site-header";
+import { Footer } from "@/components/footer";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export default function LangLayout({ children, params }: {
     children: React.ReactNode
@@ -12,7 +13,9 @@ export default function LangLayout({ children, params }: {
             enableSystem
             disableTransitionOnChange
         >
+            <SiteHeader lang={params.lang} />
             {children}
+            <Footer />
         </ThemeProvider>
     )
 }
