@@ -1,6 +1,8 @@
+
 import { SiteHeader } from "@/components/site-header";
 import { Footer } from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
+import { BackToTop } from "@/components/back-to-top";
 
 export default function LangLayout({ children, params }: {
     children: React.ReactNode
@@ -16,6 +18,7 @@ export default function LangLayout({ children, params }: {
             <SiteHeader lang={params.lang} />
             {children}
             <Footer />
+            <BackToTop />
         </ThemeProvider>
     )
 }
