@@ -8,17 +8,17 @@ This document outlines the development plan for creating a new, modern landing p
 
 ## Phase 0: Project Setup & Foundation
 
-- [ ] **Task 0.1:** Initialize a new Next.js project with TypeScript.
-- [ ] **Task 0.2:** Set up the basic project structure (directories for `components`, `styles`, `lib`, `public`).
-- [ ] **Task 0.3:** Install and configure essential dependencies (e.g., for styling, animations).
-- [ ] **Task 0.4:** Initialize a Git repository and make the initial commit.
-- [ ] **Task 0.5:** Create the documentation directory `./.gemini/tools/` and save initial tool documentation (Git, Next.js, Docker).
+- [x] **Task 0.1:** Initialize a new Next.js project with TypeScript.
+- [x] **Task 0.2:** Set up the basic project structure (directories for `components`, `styles`, `lib`, `public`).
+- [x] **Task 0.3:** Install and configure essential dependencies (e.g., for styling, animations).
+- [x] **Task 0.4:** Initialize a Git repository and make the initial commit.
+- [x] **Task 0.5:** Create the documentation directory `./.gemini/tools/` and save initial tool documentation (Git, Next.js, Docker).
 
 ## Phase 1: Core Structure & UI/UX
 
-- [ ] **Task 1.1:** Develop a global layout component (`Layout.tsx`).
-- [ ] **Task 1.2:** Create the site `Header` component with navigation links.
-- [ ] **Task 1.3:** Create the site `Footer` component with relevant information and links.
+- [x] **Task 1.1:** Develop a global layout component (`Layout.tsx`).
+- [x] **Task 1.2:** Create the site `Header` component with navigation links.
+- [x] **Task 1.3:** Create the site `Footer` component with relevant information and links.
 - [ ] **Task 1.4:** Implement a basic responsive design to ensure usability on different screen sizes.
 - [ ] **Task 1.5:** Choose a color palette and typography that reflects a modern and professional brand identity.
 
