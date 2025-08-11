@@ -1,5 +1,5 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { MotionDiv } from "./motion";
 
 const services = [
     {
@@ -22,14 +22,21 @@ export const Services = () => {
             <h2 className="text-3xl font-bold text-center mb-8">Our Services</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {services.map((service, index) => (
-                    <Card key={index}>
-                        <CardHeader>
-                            <CardTitle>{service.title}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <p>{service.description}</p>
-                        </CardContent>
-                    </Card>
+                    <MotionDiv
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: index * 0.2 }}
+                    >
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>{service.title}</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <p>{service.description}</p>
+                            </CardContent>
+                        </Card>
+                    </MotionDiv>
                 ))}
             </div>
         </section>
