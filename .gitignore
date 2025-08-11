@@ -11,11 +11,8 @@
 /build
 
 # Environment variables
-.local
-.development.local
-.test.local
-.production.local
-
+.env*.local
+.env
 
 # Log files
 npm-debug.log*
