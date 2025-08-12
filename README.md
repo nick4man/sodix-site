@@ -1,192 +1,192 @@
-# Sodix Site - Современная лендинг-страница
+# Sodix Site - Modern Landing Page
 
-Современная лендинг-страница для строительной компании Sodix, созданная с использованием Next.js 15, TypeScript и Tailwind CSS.
+A modern landing page for Sodix construction company, built with Next.js 15, TypeScript, and Tailwind CSS.
 
-## 🚀 Особенности
+## 🚀 Features
 
-- **Современный дизайн** с градиентами и анимациями
-- **Полная интернационализация** (русский и английский языки)
-- **Адаптивный дизайн** для всех устройств
-- **Плавная прокрутка** и анимации элементов
-- **Темная/светлая тема** с переключателем
-- **Оптимизированная производительность** с Next.js 15
-- **Docker поддержка** для легкого развертывания
+- **Modern Design** with gradients and animations
+- **Full Internationalization** (Russian and English languages)
+- **Responsive Design** for all devices
+- **Smooth Scrolling** and element animations
+- **Dark/Light Theme** with toggle
+- **Optimized Performance** with Next.js 15
+- **Docker Support** for easy deployment
 
-## 🛠️ Технологии
+## 🛠️ Technologies
 
 - **Frontend**: Next.js 15, React 19, TypeScript
-- **Стили**: Tailwind CSS 4, CSS Modules
-- **Анимации**: Framer Motion
-- **Интернационализация**: next-intl
-- **UI компоненты**: Radix UI, Lucide React
-- **Сборка**: Webpack 5, PostCSS
+- **Styling**: Tailwind CSS 4, CSS Modules
+- **Animations**: Framer Motion
+- **Internationalization**: next-intl
+- **UI Components**: Radix UI, Lucide React
+- **Build**: Webpack 5, PostCSS
 
-## 📁 Структура проекта
+## 📁 Project Structure
 
 ```
 sodix-site/
 ├── app/                    # App Router (Next.js 15)
-│   ├── [lang]/           # Динамические маршруты для языков
-│   ├── globals.css       # Глобальные стили
-│   └── layout.tsx        # Корневой layout
-├── components/            # React компоненты
-│   ├── ui/               # Базовые UI компоненты
-│   ├── hero.tsx          # Главная секция
-│   ├── about.tsx         # О компании
-│   ├── services.tsx      # Услуги
-│   ├── portfolio.tsx     # Портфолио
-│   ├── contacts.tsx      # Контакты
-│   └── footer.tsx        # Подвал
-├── dictionaries/          # Словари для i18n
-│   ├── en.json           # Английский
-│   └── ru.json           # Русский
-├── lib/                  # Утилиты и хелперы
-├── public/               # Статические файлы
-└── .gemini/              # Документация по инструментам
+│   ├── [lang]/           # Dynamic routes for languages
+│   ├── globals.css       # Global styles
+│   └── layout.tsx        # Root layout
+├── components/            # React components
+│   ├── ui/               # Base UI components
+│   ├── hero.tsx          # Hero section
+│   ├── about.tsx         # About company
+│   ├── services.tsx      # Services
+│   ├── portfolio.tsx     # Portfolio
+│   ├── contacts.tsx      # Contacts
+│   └── footer.tsx        # Footer
+├── dictionaries/          # i18n dictionaries
+│   ├── en.json           # English
+│   └── ru.json           # Russian
+├── lib/                  # Utilities and helpers
+├── public/               # Static files
+└── .gemini/              # Tool documentation
 ```
 
-## 🚀 Быстрый старт
+## 🚀 Quick Start
 
-### Предварительные требования
+### Prerequisites
 
 - Node.js 18+ 
-- npm или yarn
+- npm or yarn
 - Git
 
-### Установка
+### Installation
 
-1. **Клонируйте репозиторий**
+1. **Clone the repository**
    ```bash
    git clone <repository-url>
    cd sodix-site
    ```
 
-2. **Установите зависимости**
+2. **Install dependencies**
    ```bash
    npm install
    ```
 
-3. **Запустите в режиме разработки**
+3. **Run in development mode**
    ```bash
    npm run dev
    ```
 
-4. **Откройте браузер**
+4. **Open browser**
    ```
    http://localhost:3000
    ```
 
-## 🌐 Интернационализация
+## 🌐 Internationalization
 
-Проект поддерживает два языка:
-- **Русский**: `/ru`
-- **Английский**: `/en`
+The project supports two languages:
+- **Russian**: `/ru`
+- **English**: `/en`
 
-Язык определяется автоматически на основе заголовков браузера или может быть выбран вручную.
+Language is automatically determined based on browser headers or can be selected manually.
 
 ## 🐳 Docker
 
-### Сборка образа
+### Build image
 ```bash
 npm run docker:build
 ```
 
-### Запуск контейнера
+### Run container
 ```bash
 npm run docker:run
 ```
 
-### Остановка контейнера
+### Stop container
 ```bash
 npm run docker:stop
 ```
 
-## 📝 Доступные скрипты
+## 📝 Available Scripts
 
-- `npm run dev` - Запуск в режиме разработки
-- `npm run build` - Сборка для продакшена
-- `npm run start` - Запуск собранного приложения
-- `npm run lint` - Проверка кода
-- `npm run docker:build` - Сборка Docker образа
-- `npm run docker:run` - Запуск Docker контейнера
+- `npm run dev` - Run in development mode
+- `npm run build` - Build for production
+- `npm run start` - Run built application
+- `npm run lint` - Code linting
+- `npm run docker:build` - Build Docker image
+- `npm run docker:run` - Run Docker container
 
-## 🎨 Кастомизация
+## 🎨 Customization
 
-### Цветовая схема
-Основные цвета определены в `tailwind.config.ts`:
+### Color Scheme
+Main colors are defined in `tailwind.config.ts`:
 - Primary: Blue (#2563eb)
 - Secondary: Indigo (#6366f1)
 - Accent: Green (#10b981)
 
-### Шрифты
-Проект использует системные шрифты с fallback на Inter.
+### Fonts
+The project uses system fonts with Inter fallback.
 
-### Анимации
-Все анимации реализованы с помощью Framer Motion с плавными переходами.
+### Animations
+All animations are implemented using Framer Motion with smooth transitions.
 
-## 📱 Адаптивность
+## 📱 Responsiveness
 
-- **Mobile First** подход
+- **Mobile First** approach
 - **Breakpoints**: sm (640px), md (768px), lg (1024px), xl (1280px)
-- **Touch-friendly** интерфейс
-- **Оптимизированные изображения** для разных экранов
+- **Touch-friendly** interface
+- **Optimized images** for different screens
 
-## 🔧 Разработка
+## 🔧 Development
 
-### Добавление новых секций
-1. Создайте компонент в `components/`
-2. Добавьте переводы в `dictionaries/`
-3. Импортируйте в `app/[lang]/page.tsx`
-4. Добавьте ID секции для навигации
+### Adding New Sections
+1. Create component in `components/`
+2. Add translations in `dictionaries/`
+3. Import in `app/[lang]/page.tsx`
+4. Add section ID for navigation
 
-### Добавление новых языков
-1. Создайте словарь в `dictionaries/`
-2. Добавьте язык в `i18n.config.ts`
-3. Обновите middleware при необходимости
+### Adding New Languages
+1. Create dictionary in `dictionaries/`
+2. Add language in `i18n.config.ts`
+3. Update middleware if necessary
 
-## 📚 Документация по инструментам
+## 📚 Tool Documentation
 
-Документация по использованию инструментов находится в каталоге `./.gemini/tools/`:
+Tool documentation is located in the `./.gemini/tools/` directory:
 
-- [Git](./.gemini/tools/git_ru.md) - Работа с Git
-- [Next.js](./.gemini/tools/nextjs_ru.md) - Разработка на Next.js
-- [Docker](./.gemini/tools/docker_ru.md) - Контейнеризация
-- [Google Workspace Integration](./.gemini/GOOGLE_WORKSPACE_INTEGRATION.md) - Интеграция с Google Workspace
+- [Git](./.gemini/tools/git.md) - Git workflow
+- [Next.js](./.gemini/tools/nextjs.md) - Next.js development
+- [Docker](./.gemini/tools/docker.md) - Containerization
+- [Google Workspace Integration](./.gemini/GOOGLE_WORKSPACE_INTEGRATION.md) - Google Workspace integration
 
-## 🚀 Развертывание
+## 🚀 Deployment
 
-### Vercel (рекомендуется)
-1. Подключите GitHub репозиторий
-2. Настройте переменные окружения
-3. Deploy автоматически при push
+### Vercel (recommended)
+1. Connect GitHub repository
+2. Configure environment variables
+3. Deploy automatically on push
 
 ### Docker
-1. Соберите образ: `npm run docker:build`
-2. Запустите: `npm run docker:run`
-3. Откройте порт 3000
+1. Build image: `npm run docker:build`
+2. Run: `npm run docker:run`
+3. Open port 3000
 
-### Статический хостинг
-1. Соберите проект: `npm run build`
-2. Экспортируйте: `npm run export`
-3. Загрузите файлы на хостинг
+### Static Hosting
+1. Build project: `npm run build`
+2. Export: `npm run export`
+3. Upload files to hosting
 
-## 🤝 Вклад в проект
+## 🤝 Contributing
 
-1. Fork репозитория
-2. Создайте feature branch
-3. Внесите изменения
-4. Создайте Pull Request
+1. Fork the repository
+2. Create feature branch
+3. Make changes
+4. Create Pull Request
 
-## 📄 Лицензия
+## 📄 License
 
-Этот проект является собственностью компании Sodix.
+This project is owned by Sodix company.
 
-## 📞 Поддержка
+## 📞 Support
 
-По вопросам разработки и поддержки обращайтесь:
+For development and support questions, contact:
 - Email: dev@sodix.org
-- Телефон: +7 (495) 123-45-67
+- Phone: +7 (495) 123-45-67
 
 ---
 
-**Sodix** - Создаем надежные фундаменты для будущих поколений 🏗️
+**Sodix** - Building reliable foundations for future generations 🏗️
