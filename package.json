@@ -7,18 +7,24 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "docker:build": "docker build -t sodix-site .",
+    "docker:run": "docker run -p 3000:3000 --name sodix-site sodix-site",
+    "docker:stop": "docker stop sodix-site",
+    "docker:prune": "docker rm sodix-site"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@formatjs/intl-localematcher": "^0.6.1",
     "@radix-ui/react-slot": "^1.2.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.539.0",
+    "negotiator": "^1.0.0",
     "next": "^15.4.6",
     "next-themes": "^0.4.6",
     "react": "^19.1.1",
@@ -26,8 +32,12 @@
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.11",
     "@types/node": "^24.2.1",
     "@types/react": "^19.1.10",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11",
     "typescript": "^5.9.2"
   }
 }

@@ -19,8 +19,8 @@ This document outlines the development plan for creating a new, modern landing p
 - [x] **Task 1.1:** Develop a global layout component (`Layout.tsx`).
 - [x] **Task 1.2:** Create the site `Header` component with navigation links.
 - [x] **Task 1.3:** Create the site `Footer` component with relevant information and links.
-- [ ] **Task 1.4:** Implement a basic responsive design to ensure usability on different screen sizes.
-- [ ] **Task 1.5:** Choose a color palette and typography that reflects a modern and professional brand identity.
+- [x] **Task 1.4:** Implement a basic responsive design to ensure usability on different screen sizes.
+- [x] **Task 1.5:** Choose a color palette and typography that reflects a modern and professional brand identity.
 
 ## Phase 2: Content Sections & Animation
 

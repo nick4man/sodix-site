@@ -1,8 +1,10 @@
 
-export default function SlugPage({ params: { slug } }: { params: { slug: string[] } }) {
+
+export default function SlugPage({ params }: { params: { slug: string[] } }) {
+    console.log(params);
     return (
         <main>
-            <h1>{slug.join('/')}</h1>
+            <h1>{params.slug.join('/')}</h1>
         </main>
     )
 }
