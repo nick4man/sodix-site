@@ -4,10 +4,11 @@ import { Footer } from "@/components/footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { BackToTop } from "@/components/back-to-top";
 
-export default function LangLayout({ children, params }: {
+export default async function LangLayout({ children, params }: {
     children: React.ReactNode
-    params: { lang: string }
+    params: Promise<{ lang: string }>
 }) {
+    const resolvedParams = await params;
     return (
         <ThemeProvider
             attribute="class"
@@ -15,7 +16,7 @@ export default function LangLayout({ children, params }: {
             enableSystem
             disableTransitionOnChange
         >
-            <SiteHeader lang={params.lang} />
+            <SiteHeader lang={resolvedParams.lang} />
             {children}
             <Footer />
             <BackToTop />

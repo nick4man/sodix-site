@@ -1,10 +1,11 @@
 
 
-export default function SlugPage({ params }: { params: { slug: string[] } }) {
-    console.log(params);
+export default async function SlugPage({ params }: { params: Promise<{ slug: string[] }> }) {
+    const resolvedParams = await params;
+    console.log(resolvedParams);
     return (
         <main>
-            <h1>{params.slug.join('/')}</h1>
+            <h1>{resolvedParams.slug.join('/')}</h1>
         </main>
     )
 }
