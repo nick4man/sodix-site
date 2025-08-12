@@ -1,22 +1,10 @@
 
 import type { Metadata } from "next";
-import { Montserrat, Lato } from "next/font/google";
 import "./globals.css";
-
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  variable: "--font-montserrat",
-});
-
-const lato = Lato({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-lato",
-});
 
 export const metadata: Metadata = {
   title: "Sodix",
-  description: "Sodix is a software development company.",
+  description: "Sodix - Professional solutions in zero-cycle construction",
 };
 
 export default function RootLayout({
@@ -25,8 +13,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${lato.variable} ${montserrat.variable} font-sans`}>{children}</body>
+    <html>
+      <body>{children}</body>
     </html>
   );
 }
