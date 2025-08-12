@@ -35,7 +35,7 @@ This document outlines the development plan for creating a new, modern landing p
 
 - [x] **Task 3.1:** Set up internationalization (i18n) to support English and Russian languages.
 - [x] **Task 3.2:** Translate all UI and content into Russian.
-- [ ] **Task 3.3:** Research and plan the integration with Google Workspace APIs to fetch project information for the portfolio.
+- [x] **Task 3.3:** Research and plan the integration with Google Workspace APIs to fetch project information for the portfolio.
 - [ ] **Task 3.4 (Stretch Goal):** Implement the Google Workspace integration.
 
 ## Phase 4: Finalization & Deployment
