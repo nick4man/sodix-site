@@ -1,7 +1,7 @@
 
 import { getDictionary } from "@/lib/dictionary";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MotionDiv } from "./motion";
+import { AnimatedSection } from "./animated-section";
 import { MapPin, Calendar, Building2 } from "lucide-react";
 
 export const Portfolio = async ({ lang }: { lang: string }) => {
@@ -59,7 +59,7 @@ export const Portfolio = async ({ lang }: { lang: string }) => {
 
     return (
         <section className="container py-20 bg-gray-900 text-white">
-            <MotionDiv
+            <AnimatedSection
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -72,11 +72,11 @@ export const Portfolio = async ({ lang }: { lang: string }) => {
                 <p className="text-xl text-gray-300 max-w-3xl mx-auto">
                     Реализованные проекты по всей России с использованием передовых технологий
                 </p>
-            </MotionDiv>
+            </AnimatedSection>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {projects.map((project, index) => (
-                    <MotionDiv
+                    <AnimatedSection
                         key={index}
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -114,11 +114,11 @@ export const Portfolio = async ({ lang }: { lang: string }) => {
                                 </button>
                             </CardContent>
                         </Card>
-                    </MotionDiv>
+                    </AnimatedSection>
                 ))}
             </div>
             
-            <MotionDiv
+            <AnimatedSection
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.5 }}
@@ -128,7 +128,7 @@ export const Portfolio = async ({ lang }: { lang: string }) => {
                 <button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
                     Все проекты
                 </button>
-            </MotionDiv>
+            </AnimatedSection>
         </section>
     )
 }

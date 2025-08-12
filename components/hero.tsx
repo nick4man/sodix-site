@@ -1,7 +1,7 @@
 
 import { getDictionary } from "@/lib/dictionary";
 import { Button } from "./ui/button";
-import { MotionDiv } from "./motion";
+import { AnimatedSection } from "./animated-section";
 
 export const Hero = async ({ lang }: { lang: string }) => {
     const dictionary = await getDictionary(lang);
@@ -19,31 +19,31 @@ export const Hero = async ({ lang }: { lang: string }) => {
 
             {/* Основной контент */}
             <div className="relative z-10 container mx-auto px-4 text-center text-white">
-                <MotionDiv
+                <AnimatedSection
                     initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                     className="mb-8"
                 >
                     <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold bg-gradient-to-r from-white via-blue-100 to-indigo-200 bg-clip-text text-transparent mb-6">
                         {dictionary.hero.title}
                     </h1>
-                </MotionDiv>
+                </AnimatedSection>
                 
-                <MotionDiv
+                <AnimatedSection
                     initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
                     className="mb-12"
                 >
                     <p className="text-xl md:text-2xl lg:text-3xl text-blue-100 max-w-4xl mx-auto leading-relaxed">
                         {dictionary.hero.subtitle}
                     </p>
-                </MotionDiv>
+                </AnimatedSection>
                 
-                <MotionDiv
+                <AnimatedSection
                     initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.4 }}
                     className="flex flex-col sm:flex-row gap-4 justify-center items-center"
                 >
@@ -60,20 +60,20 @@ export const Hero = async ({ lang }: { lang: string }) => {
                     >
                         Наши проекты
                     </Button>
-                </MotionDiv>
+                </AnimatedSection>
             </div>
 
             {/* Прокрутка вниз */}
-            <MotionDiv
+            <AnimatedSection
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                whileInView={{ opacity: 1 }}
                 transition={{ duration: 1, delay: 1 }}
                 className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
             >
                 <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
                     <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-bounce" />
                 </div>
-            </MotionDiv>
+            </AnimatedSection>
         </section>
     )
 }

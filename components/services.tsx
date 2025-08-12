@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MotionDiv } from "./motion";
+import { AnimatedSection } from "./animated-section";
 import { getDictionary } from "@/lib/dictionary";
 import { 
     Anchor, 
@@ -37,7 +37,7 @@ export const Services = async ({ lang }: { lang: string }) => {
 
     return (
         <section className="container py-20 bg-gradient-to-b from-gray-50 to-white">
-            <MotionDiv
+            <AnimatedSection
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -50,13 +50,13 @@ export const Services = async ({ lang }: { lang: string }) => {
                 <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                     Профессиональные услуги в области строительства нулевого цикла с использованием современного оборудования
                 </p>
-            </MotionDiv>
+            </AnimatedSection>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {services.map((service, index) => {
                     const IconComponent = serviceIcons[index] || Building2;
                     return (
-                        <MotionDiv
+                        <AnimatedSection
                             key={index}
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -83,7 +83,7 @@ export const Services = async ({ lang }: { lang: string }) => {
                                     </div>
                                 </CardContent>
                             </Card>
-                        </MotionDiv>
+                        </AnimatedSection>
                     );
                 })}
             </div>

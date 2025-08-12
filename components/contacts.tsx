@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getDictionary } from "@/lib/dictionary";
-import { MotionDiv } from "./motion";
+import { AnimatedSection } from "./animated-section";
 import { Mail, Phone, MapPin, Clock, Send } from "lucide-react";
 
 export const Contacts = async ({ lang }: { lang: string }) => {
@@ -36,7 +36,7 @@ export const Contacts = async ({ lang }: { lang: string }) => {
 
     return (
         <section className="container py-20 bg-gradient-to-b from-gray-50 to-white">
-            <MotionDiv
+            <AnimatedSection
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -49,11 +49,11 @@ export const Contacts = async ({ lang }: { lang: string }) => {
                 <p className="text-xl text-gray-600 max-w-3xl mx-auto">
                     Свяжитесь с нами для обсуждения вашего проекта. Наши специалисты готовы ответить на все вопросы.
                 </p>
-            </MotionDiv>
+            </AnimatedSection>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
                 {/* Контактная информация */}
-                <MotionDiv
+                <AnimatedSection
                     initial={{ opacity: 0, x: -30 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8 }}
@@ -64,7 +64,7 @@ export const Contacts = async ({ lang }: { lang: string }) => {
                     </h3>
                     <div className="space-y-6">
                         {contactInfo.map((contact, index) => (
-                            <MotionDiv
+                            <AnimatedSection
                                 key={index}
                                 initial={{ opacity: 0, x: -20 }}
                                 whileInView={{ opacity: 1, x: 0 }}
@@ -86,13 +86,13 @@ export const Contacts = async ({ lang }: { lang: string }) => {
                                         {contact.description}
                                     </p>
                                 </div>
-                            </MotionDiv>
+                            </AnimatedSection>
                         ))}
                     </div>
-                </MotionDiv>
+                </AnimatedSection>
                 
                 {/* Форма обратной связи */}
-                <MotionDiv
+                <AnimatedSection
                     initial={{ opacity: 0, x: 30 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8 }}
@@ -151,7 +151,7 @@ export const Contacts = async ({ lang }: { lang: string }) => {
                             </form>
                         </CardContent>
                     </Card>
-                </MotionDiv>
+                </AnimatedSection>
             </div>
         </section>
     )

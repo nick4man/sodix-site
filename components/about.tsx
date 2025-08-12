@@ -1,5 +1,5 @@
 import { getDictionary } from "@/lib/dictionary";
-import { MotionDiv } from "./motion";
+import { AnimatedSection } from "./animated-section";
 import { Award, Users, MapPin, Clock, CheckCircle } from "lucide-react";
 
 export const About = async ({ lang }: { lang: string }) => {
@@ -25,7 +25,7 @@ export const About = async ({ lang }: { lang: string }) => {
         <section className="container py-20 bg-white">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 {/* Левая колонка - текст */}
-                <MotionDiv
+                <AnimatedSection
                     initial={{ opacity: 0, x: -30 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8 }}
@@ -41,7 +41,7 @@ export const About = async ({ lang }: { lang: string }) => {
                     {/* Особенности */}
                     <div className="space-y-4 mb-8">
                         {features.map((feature, index) => (
-                            <MotionDiv
+                            <AnimatedSection
                                 key={index}
                                 initial={{ opacity: 0, x: -20 }}
                                 whileInView={{ opacity: 1, x: 0 }}
@@ -51,17 +51,17 @@ export const About = async ({ lang }: { lang: string }) => {
                             >
                                 <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
                                 <span className="text-gray-700">{feature}</span>
-                            </MotionDiv>
+                            </AnimatedSection>
                         ))}
                     </div>
                     
                     <button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
                         Узнать больше о компании
                     </button>
-                </MotionDiv>
+                </AnimatedSection>
                 
                 {/* Правая колонка - статистика и изображение */}
-                <MotionDiv
+                <AnimatedSection
                     initial={{ opacity: 0, x: 30 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8 }}
@@ -71,7 +71,7 @@ export const About = async ({ lang }: { lang: string }) => {
                     {/* Статистика */}
                     <div className="grid grid-cols-2 gap-6">
                         {stats.map((stat, index) => (
-                            <MotionDiv
+                            <AnimatedSection
                                 key={index}
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -88,7 +88,7 @@ export const About = async ({ lang }: { lang: string }) => {
                                 <div className="text-sm text-gray-600">
                                     {stat.label}
                                 </div>
-                            </MotionDiv>
+                            </AnimatedSection>
                         ))}
                     </div>
                     
@@ -102,7 +102,7 @@ export const About = async ({ lang }: { lang: string }) => {
                             используя инновационные технологии и профессиональный подход к каждому проекту.
                         </p>
                     </div>
-                </MotionDiv>
+                </AnimatedSection>
             </div>
         </section>
     )
