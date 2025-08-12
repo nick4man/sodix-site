@@ -1,7 +1,6 @@
 
 import { SiteHeader } from "@/components/site-header";
 import { Footer } from "@/components/footer";
-import { ThemeProvider } from "@/components/theme-provider";
 import { BackToTop } from "@/components/back-to-top";
 
 export default async function LangLayout({ children, params }: {
@@ -10,16 +9,11 @@ export default async function LangLayout({ children, params }: {
 }) {
     const resolvedParams = await params;
     return (
-        <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-        >
+        <>
             <SiteHeader lang={resolvedParams.lang} />
             {children}
             <Footer />
             <BackToTop />
-        </ThemeProvider>
+        </>
     )
 }

@@ -1,7 +1,6 @@
 import { Logo } from "./logo";
 import { MainNav } from "./main-nav";
 import { MobileNav } from "./mobile-nav";
-import { ModeToggle } from "./mode-toggle";
 
 export const SiteHeader = ({ lang }: { lang: string }) => {
     return (
@@ -11,7 +10,7 @@ export const SiteHeader = ({ lang }: { lang: string }) => {
                 <MainNav lang={lang} />
                 <MobileNav />
                 <div className="flex flex-1 items-center justify-end space-x-4">
-                    <ModeToggle />
+                    {/* ModeToggle temporarily removed to fix hydration issues */}
                 </div>
             </div>
         </header>
