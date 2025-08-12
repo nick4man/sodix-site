@@ -1,10 +1,27 @@
-import { Shield } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 export const Logo = () => {
     return (
-        <a href="#" className="text-3xl font-bold text-gray-900">
-            SODIKS
-            <span className="block text-sm font-normal text-amber-500 -mt-1">Art of construction</span>
-        </a>
+        <Link href="/" className="flex items-center space-x-3 group">
+            <div className="relative w-12 h-12">
+                <Image
+                    src="/images/logo.png"
+                    alt="Содикс - Строительная компания"
+                    width={48}
+                    height={48}
+                    className="object-contain"
+                    priority
+                />
+            </div>
+            <div className="flex flex-col">
+                <span className="text-2xl font-bold text-blue-900 group-hover:text-blue-700 transition-colors">
+                    Содикс
+                </span>
+                <span className="text-sm font-normal text-blue-600 -mt-1">
+                    Строительная компания
+                </span>
+            </div>
+        </Link>
     )
 }

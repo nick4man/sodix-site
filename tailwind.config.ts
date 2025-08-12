@@ -102,12 +102,20 @@ const config = {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.8" },
         },
+        "bounce": {
+          "0%, 20%, 53%, 80%, 100%": { transform: "translate3d(0,0,0)" },
+          "40%, 43%": { transform: "translate3d(0,-30px,0)" },
+          "70%": { transform: "translate3d(0,-15px,0)" },
+          "90%": { transform: "translate3d(0,-4px,0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "float": "float 3s ease-in-out infinite",
         "glow": "glow 2s ease-in-out infinite",
+        "bounce": "bounce 1s infinite",
+        "pulse": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
@@ -116,6 +124,11 @@ const config = {
       },
       backgroundSize: {
         'grid': '50px 50px',
+      },
+      fontWeight: {
+        'bold': '700',
+        'medium': '500',
+        'black': '900',
       },
     },
   },

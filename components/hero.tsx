@@ -2,12 +2,13 @@
 import { getDictionary } from "@/lib/dictionary";
 import { Button } from "./ui/button";
 import { AnimatedSection } from "./animated-section";
-import { ArrowRight, Phone, Building2 } from "lucide-react";
+import { ArrowRight, Phone } from "lucide-react";
+import { Logo } from "./logo";
 
 export const Hero = async ({ lang }: { lang: string }) => {
     const dictionary = await getDictionary(lang);
     return (
-        <section className="bg-gradient-hero min-h-screen flex items-center justify-center text-white relative overflow-hidden">
+        <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 min-h-screen flex items-center justify-center text-white relative overflow-hidden">
             {/* Полупрозрачный текст-водяной знак на фоне */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div className="text-[20rem] md:text-[25rem] lg:text-[30rem] font-black text-white/5 select-none transform -rotate-12 leading-none">
@@ -17,8 +18,8 @@ export const Hero = async ({ lang }: { lang: string }) => {
             
             {/* Дополнительные фоновые элементы */}
             <div className="absolute inset-0">
-                <div className="absolute top-20 right-20 w-72 h-72 bg-amber-500/20 rounded-full blur-3xl animate-pulse" />
-                <div className="absolute bottom-20 left-20 w-96 h-96 bg-yellow-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
+                <div className="absolute top-20 right-20 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl animate-pulse" />
+                <div className="absolute bottom-20 left-20 w-96 h-96 bg-blue-300/20 rounded-full blur-3xl animate-pulse delay-1000" />
             </div>
 
             {/* Основной контент */}
@@ -31,12 +32,12 @@ export const Hero = async ({ lang }: { lang: string }) => {
                         transition={{ duration: 0.8 }}
                         className="mb-8"
                     >
-                        <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-primary rounded-2xl mb-6 shadow-strong">
-                            <Building2 className="w-12 h-12 text-white" />
+                        <div className="mb-8">
+                            <Logo />
                         </div>
                         <h1 className="text-6xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tight">
                             ИСКУССТВО{" "}
-                            <span className="text-gradient">СТРОИТЕЛЬСТВА</span>
+                            <span className="text-blue-200">СТРОИТЕЛЬСТВА</span>
                         </h1>
                         <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
                             НУЛЕВОГО ЦИКЛА
@@ -64,7 +65,7 @@ export const Hero = async ({ lang }: { lang: string }) => {
                     >
                         <Button 
                             size="lg" 
-                            className="bg-gradient-primary hover:shadow-strong text-white px-10 py-5 text-lg font-bold rounded-xl shadow-soft transform hover:scale-105 transition-all duration-300 group"
+                            className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-10 py-5 text-lg font-bold rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 group"
                         >
                             <Phone className="w-5 h-5 mr-2" />
                             Связаться с нами
@@ -87,15 +88,15 @@ export const Hero = async ({ lang }: { lang: string }) => {
                         className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto"
                     >
                         <div className="text-center p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20">
-                            <div className="text-3xl md:text-4xl font-bold text-amber-400 mb-2">15+</div>
+                            <div className="text-3xl md:text-4xl font-bold text-blue-200 mb-2">15+</div>
                             <div className="text-gray-200 font-medium">Лет опыта</div>
                         </div>
                         <div className="text-center p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20">
-                            <div className="text-3xl md:text-4xl font-bold text-yellow-400 mb-2">200+</div>
+                            <div className="text-3xl md:text-4xl font-bold text-blue-200 mb-2">200+</div>
                             <div className="text-gray-200 font-medium">Реализованных проектов</div>
                         </div>
                         <div className="text-center p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20">
-                            <div className="text-3xl md:text-4xl font-bold text-orange-400 mb-2">50+</div>
+                            <div className="text-3xl md:text-4xl font-bold text-blue-200 mb-2">50+</div>
                             <div className="text-gray-200 font-medium">Специалистов</div>
                         </div>
                     </AnimatedSection>

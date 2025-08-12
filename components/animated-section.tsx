@@ -1,16 +1,16 @@
 "use client"
 
-import { motion } from "framer-motion";
+import { motion, Transition, TargetAndTransition } from "framer-motion";
 import { ReactNode } from "react";
 
 interface AnimatedSectionProps {
   children: ReactNode;
   className?: string;
-  initial?: any;
-  animate?: any;
-  whileInView?: any;
-  transition?: any;
-  viewport?: any;
+  initial?: TargetAndTransition;
+  animate?: TargetAndTransition;
+  whileInView?: TargetAndTransition;
+  transition?: Transition;
+  viewport?: { once?: boolean };
 }
 
 export const AnimatedSection = ({

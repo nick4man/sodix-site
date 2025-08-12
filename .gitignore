@@ -22,4 +22,5 @@ yarn-error.log*
 GEMINI.md
 
 .cursor
+/src
 
