@@ -2,6 +2,7 @@
     "header": {
         "about": "About",
         "services": "Services",
+        "portfolio": "Portfolio",
         "contacts": "Contacts"
     },
     "hero": {
@@ -50,6 +51,9 @@
             "title": "Anchor Systems",
             "description": "Creation of anchor systems for retaining structures."
         }
+    },
+    "portfolio": {
+        "title": "Our Portfolio"
     },
     "contacts": {
         "title": "Contact Us",

@@ -26,7 +26,7 @@ This document outlines the development plan for creating a new, modern landing p
 
 - [x] **Task 2.1:** Build the "Hero" section: a compelling introduction with a clear call-to-action.
 - [x] **Task 2.2:** Build the "Services" section to detail what Sodix offers.
-- [ ] **Task 2.3:** Build the "Portfolio" / "Completed Works" section.
+- [x] **Task 2.3:** Build the "Portfolio" / "Completed Works" section.
 - [ ] **Task 2.4:** Build the "About Us" section.
 - [ ] **Task 2.5:** Build the "Contact Us" section with a functional contact form.
 - [ ] **Task 2.6:** Integrate smooth scrolling for navigation and subtle animations for elements to enhance user experience.
