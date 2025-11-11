@@ -1,9 +1,17 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { SearchResult } from './models/search-result.model';
+
+// Расширяем интерфейс SearchResult для API
+interface ExtendedSearchResult extends SearchResult {
+  table: string;
+  column: string;
+  row_data: Record<string, any>;
+}
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiService {
   private baseUrl = 'http://localhost:8000/api';
@@ -24,5 +32,10 @@ export class ApiService {
 
   getDatabaseInfo(): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/database/info`);
+  }
+
+  searchMaterials(terms: string[]): Observable<ExtendedSearchResult[]> {
+    const params = new HttpParams().set('terms', terms.join(','));
+    return this.http.get<ExtendedSearchResult[]>(`${this.baseUrl}/search_materials`, { params });
   }
 }

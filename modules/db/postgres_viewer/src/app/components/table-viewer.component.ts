@@ -6,21 +6,30 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { ApiService } from '../api.service';
 
+interface TableInfo {
+  name: string;
+  columns: number;
+}
+
+interface ColumnInfo {
+  name: string;
+  type: string;
+  nullable: boolean;
+}
+
+interface TableData {
+  schema: ColumnInfo[];
+  data: any[];
+}
+
 @Component({
   selector: 'app-table-viewer',
   standalone: true,
-  imports: [
-    NgFor,
-    NgIf,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatCardModule,
-    MatTableModule
-  ],
+  imports: [NgFor, NgIf, MatFormFieldModule, MatSelectModule, MatCardModule, MatTableModule],
   template: `
     <div class="container">
       <h2>Просмотр таблиц PostgreSQL</h2>
-      
+
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Выберите таблицу</mat-label>
         <mat-select (selectionChange)="onTableChange($event)">
@@ -50,7 +59,7 @@ import { ApiService } from '../api.service';
                 <td mat-cell *matCellDef="let column">{{ column.nullable ? 'Да' : 'Нет' }}</td>
               </ng-container>
               <tr mat-header-row *matHeaderRowDef="displayedSchemaColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedSchemaColumns;"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedSchemaColumns"></tr>
             </table>
           </mat-card-content>
         </mat-card>
@@ -78,7 +87,7 @@ import { ApiService } from '../api.service';
                   <td mat-cell *matCellDef="let row">{{ row[column] }}</td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="displayedDataColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedDataColumns;"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedDataColumns"></tr>
               </table>
             </div>
           </mat-card-content>
@@ -86,24 +95,39 @@ import { ApiService } from '../api.service';
       </div>
     </div>
   `,
-  styles: [`
-    .container { padding: 20px; }
-    .full-width { width: 100%; margin-bottom: 20px; }
-    .schema-card, .data-card { margin-bottom: 20px; }
-    .table-container { max-height: 500px; overflow: auto; }
-    table { width: 100%; }
-  `]
+  styles: [
+    `
+      .container {
+        padding: 20px;
+      }
+      .full-width {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+      .schema-card,
+      .data-card {
+        margin-bottom: 20px;
+      }
+      .table-container {
+        max-height: 500px;
+        overflow: auto;
+      }
+      table {
+        width: 100%;
+      }
+    `,
+  ],
 })
 export class TableViewerComponent implements OnInit {
-  tables: any[] = [];
+  tables: TableInfo[] = [];
   selectedTable: string = '';
-  tableData: any = null;
-  schemaData: any[] = [];
+  tableData: TableData | null = null;
+  schemaData: ColumnInfo[] = [];
   limit: number = 100;
   displayedDataColumns: string[] = [];
   displayedSchemaColumns = ['name', 'type', 'nullable'];
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
     this.loadTables();
@@ -111,10 +135,10 @@ export class TableViewerComponent implements OnInit {
 
   loadTables(): void {
     this.apiService.getTables().subscribe(
-      data => {
+      (data) => {
         this.tables = data;
       },
-      error => console.error('Error loading tables:', error)
+      (error) => console.error('Error loading tables:', error),
     );
   }
 
@@ -127,14 +151,14 @@ export class TableViewerComponent implements OnInit {
     if (!this.selectedTable) return;
 
     this.apiService.getTableData(this.selectedTable, this.limit).subscribe(
-      data => {
+      (data) => {
         this.tableData = data;
         this.schemaData = data.schema;
         if (data.data.length > 0) {
           this.displayedDataColumns = Object.keys(data.data[0]);
         }
       },
-      error => console.error('Error loading table data:', error)
+      (error) => console.error('Error loading table data:', error),
     );
   }
 }

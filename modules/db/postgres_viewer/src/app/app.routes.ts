@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
+import { TableViewerComponent } from './components/table-viewer.component';
 
 export const routes: Routes = [
-    {
-        path: '',
-        loadComponent: () =>
-            import('./component/table-viewer.component').then((m) => m.TableViewerComponent)
-    }
+  {
+    path: '',
+    component: TableViewerComponent,
+  },
 ];

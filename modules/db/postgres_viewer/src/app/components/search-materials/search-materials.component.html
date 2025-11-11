@@ -1,0 +1,80 @@
+<!-- src/app/components/search-materials/search-materials.component.html -->
+<mat-card class="search-card">
+  <mat-card-header>
+    <mat-card-title>Поиск металлических материалов</mat-card-title>
+    <mat-card-subtitle>Ищем ключевые слова по всем текстовым колонкам</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-form-field class="full-width" appearance="outline">
+      <mat-chip-list #chipList>
+        <mat-chip *ngFor="let term of terms" removable (removed)="removeTerm(term)">
+          {{ term }}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <input
+          placeholder="Добавить термин..."
+          [formControl]="termCtrl"
+          [matChipInputFor]="chipList"
+          [matChipInputSeparatorKeyCodes]="[13,188]"  <!-- Enter и запятая -->
+          (matChipInputTokenEnd)="addTerm()" />
+      </mat-chip-list>
+    </mat-form-field>
+
+    <div class="actions">
+      <button mat-raised-button color="primary" (click)="search()" [disabled]="isLoading || terms.length===0">
+        <mat-icon>search</mat-icon>
+        <span *ngIf="!isLoading">Найти</span>
+        <mat-progress-spinner *ngIf="isLoading"
+                              diameter="20"
+                              mode="indeterminate">
+        </mat-progress-spinner>
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card *ngIf="error" class="error-card">
+  <mat-card-content>
+    <mat-icon color="warn">error</mat-icon>
+    {{ error }}
+  </mat-card-content>
+</mat-card>
+
+<mat-card *ngIf="results.length" class="results-card">
+  <mat-card-header>
+    <mat-card-title>Найдено совпадений: {{ results.length }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="table-container">
+    <table mat-table [dataSource]="results" class="mat-elevation-z2">
+
+      <!-- Таблица -->
+      <ng-container matColumnDef="table">
+        <th mat-header-cell *matHeaderCellDef>Таблица</th>
+        <td mat-cell *matCellDef="let row">{{ row.table }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="column">
+        <th mat-header-cell *matHeaderCellDef>Колонка</th>
+        <td mat-cell *matCellDef="let row">{{ row.column }}</td>
+      </ng-container>
+
+      <!-- Динамические колонки из row_data -->
+      <ng-container *ngFor="let col of displayedColumns.slice(2)" [matColumnDef]="col">
+        <th mat-header-cell *matHeaderCellDef>{{ col }}</th>
+        <td mat-cell *matCellDef="let row">
+          <span [innerHTML]="row.row_data[col] | highlight:terms"></span>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          class="data-row"></tr>
+    </table>
+  </mat-card-content>
+</mat-card>
+
+<mat-card *ngIf="!isLoading && !results.length && !error" class="info-card">
+  <mat-card-content>
+    Введите термин(-ы) и нажмите «Найти» для отображения результатов.
+  </mat-card-content>
+</mat-card>

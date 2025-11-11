@@ -1,0 +1,58 @@
+/* src/app/components/search-materials/search-materials.component.scss */
+.full-width {
+  width: 100%;
+}
+
+.search-card {
+  margin: 16px;
+}
+
+.actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.error-card {
+  margin: 16px;
+  background: #ffe6e6;
+  color: #a10000;
+}
+
+.info-card {
+  margin: 16px;
+  background: #e8f4fd;
+  color: #1a73e8;
+}
+
+.results-card {
+  margin: 16px;
+  .table-container {
+    max-height: 400px;
+    overflow: auto;
+  }
+  table {
+    width: 100%;
+    th.mat-header-cell {
+      background-color: #3f51b5;
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    tr.data-row:nth-child(odd) {
+      background-color: #fafafa;
+    }
+    tr.data-row:hover {
+      background-color: #e8eaf6 !important;
+    }
+    td.mat-cell, th.mat-header-cell {
+      padding: 8px 16px;
+    }
+    mark {
+      background: #ffeb3b;
+      color: black;
+      padding: 0 2px;
+    }
+  }
+}
