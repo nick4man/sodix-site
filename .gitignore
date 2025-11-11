@@ -24,3 +24,22 @@ GEMINI.md
 .cursor
 /src
 
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+node_modules
+.angular
+.vscode
+*.env
+*backend
+*.python-version
+*roadmap.md 
+
+
