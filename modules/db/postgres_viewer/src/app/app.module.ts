@@ -22,7 +22,7 @@ import { SearchMaterialsComponent } from './components/search-materials/search-m
 import { HighlightPipe } from './pipe/highlight.pipe';
 
 @NgModule({
-  declarations: [AppComponent, TableViewerComponent, SearchMaterialsComponent, HighlightPipe],
+  declarations: [],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -38,7 +38,10 @@ import { HighlightPipe } from './pipe/highlight.pipe';
     MatProgressSpinnerModule,
     MatTableModule,
     AppRoutingModule,
+    AppComponent,
+    TableViewerComponent,
+    SearchMaterialsComponent,
+    HighlightPipe,
   ],
-  bootstrap: [AppComponent],
 })
 export class AppModule {}

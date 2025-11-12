@@ -81,7 +81,7 @@ interface TableData {
           </mat-card-header>
           <mat-card-content>
             <div class="table-container">
-              <table mat-table [dataSource]="tableData?.data">
+              <table mat-table [dataSource]="tableData?.data || []">
                 <ng-container *ngFor="let column of displayedDataColumns" [matColumnDef]="column">
                   <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
                   <td mat-cell *matCellDef="let row">{{ row[column] }}</td>
@@ -134,12 +134,17 @@ export class TableViewerComponent implements OnInit {
   }
 
   loadTables(): void {
-    this.apiService.getTables().subscribe(
-      (data) => {
+    console.log('Loading tables...');
+    this.apiService.getTables().subscribe({
+      next: (data) => {
+        console.log('Tables loaded:', data);
         this.tables = data;
       },
-      (error) => console.error('Error loading tables:', error),
-    );
+      error: (error) => {
+        console.error('Error loading tables:', error);
+        alert('Ошибка загрузки таблиц: ' + (error.error?.detail || error.message || 'Неизвестная ошибка'));
+      },
+    });
   }
 
   onTableChange(event: any): void {

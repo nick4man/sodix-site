@@ -6,18 +6,21 @@
   </mat-card-header>
   <mat-card-content>
     <mat-form-field class="full-width" appearance="outline">
-      <mat-chip-list #chipList>
-        <mat-chip *ngFor="let term of terms" removable (removed)="removeTerm(term)">
+      <mat-chip-grid #chipGrid>
+        <mat-chip-row *ngFor="let term of terms" (removed)="removeTerm(term)">
           {{ term }}
-          <mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip>
+          <button matChipRemove [attr.aria-label]="'Удалить ' + term">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip-row>
         <input
+          matInput
           placeholder="Добавить термин..."
           [formControl]="termCtrl"
-          [matChipInputFor]="chipList"
-          [matChipInputSeparatorKeyCodes]="[13,188]"  <!-- Enter и запятая -->
+          [matChipInputFor]="chipGrid"
+          [matChipInputSeparatorKeyCodes]="[13,188]"
           (matChipInputTokenEnd)="addTerm()" />
-      </mat-chip-list>
+      </mat-chip-grid>
     </mat-form-field>
 
     <div class="actions">
