@@ -16,7 +16,7 @@ interface ExtendedSearchResult extends SearchResult {
 export class ApiService {
   private baseUrl = 'http://localhost:8000/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getTables(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/tables`);
@@ -34,8 +34,11 @@ export class ApiService {
     return this.http.get<any>(`${this.baseUrl}/database/info`);
   }
 
-  searchMaterials(terms: string[]): Observable<ExtendedSearchResult[]> {
-    const params = new HttpParams().set('terms', terms.join(','));
+  searchMaterials(terms: string[], tables?: string[]): Observable<ExtendedSearchResult[]> {
+    let params = new HttpParams().set('terms', terms.join(','));
+    if (tables && tables.length > 0) {
+      params = params.set('tables', tables.join(','));
+    }
     return this.http.get<ExtendedSearchResult[]>(`${this.baseUrl}/search_materials`, { params });
   }
 }

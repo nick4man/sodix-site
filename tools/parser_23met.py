@@ -57,22 +57,52 @@ def create_tables():
                 )
             """)
             
-            # Таблица для материалов
+            # Проверяем, существует ли таблица materials_23met со старой структурой
+            cursor.execute("""
+                SELECT EXISTS (
+                    SELECT 1 FROM information_schema.tables 
+                    WHERE table_schema = 'public' 
+                    AND table_name = 'materials_23met'
+                )
+            """)
+            table_exists = cursor.fetchone()[0]
+            
+            if table_exists:
+                # Проверяем структуру таблицы
+                cursor.execute("""
+                    SELECT column_name FROM information_schema.columns 
+                    WHERE table_schema = 'public' 
+                    AND table_name = 'materials_23met'
+                    AND column_name = 'наименование'
+                """)
+                has_new_structure = cursor.fetchone() is not None
+                
+                if not has_new_structure:
+                    print("Обнаружена старая структура таблицы. Выполняется миграция...")
+                    # Удаляем старые индексы, если они существуют
+                    old_indexes = [
+                        'idx_materials_category',
+                        'idx_materials_name',
+                        'idx_materials_size'
+                    ]
+                    for idx_name in old_indexes:
+                        cursor.execute(f"DROP INDEX IF EXISTS {idx_name} CASCADE")
+                    # Удаляем старую таблицу
+                    cursor.execute("DROP TABLE IF EXISTS materials_23met CASCADE")
+                    print("Старая таблица удалена")
+            
+            # Таблица для материалов (только необходимые поля)
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS materials_23met (
                     id SERIAL PRIMARY KEY,
-                    category VARCHAR(255),
-                    material_name VARCHAR(255),
-                    size VARCHAR(100),
-                    diameter VARCHAR(50),
-                    weight_per_meter NUMERIC(10, 4),
-                    cross_section_area NUMERIC(10, 4),
-                    gost VARCHAR(255),
-                    url TEXT,
+                    наименование TEXT,
+                    гост TEXT,
+                    класс VARCHAR(50),
+                    диаметр VARCHAR(50),
+                    номинальная_масса_1_метра NUMERIC(10, 4),
                     page_url TEXT,
-                    raw_data JSONB,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    UNIQUE(category, material_name, size, diameter, url)
+                    UNIQUE(наименование, гост, класс, диаметр, номинальная_масса_1_метра, page_url)
                 )
             """)
             
@@ -91,16 +121,20 @@ def create_tables():
             
             # Индексы для быстрого поиска
             cursor.execute("""
-                CREATE INDEX IF NOT EXISTS idx_materials_category 
-                ON materials_23met(category)
+                CREATE INDEX IF NOT EXISTS idx_materials_наименование 
+                ON materials_23met(наименование)
             """)
             cursor.execute("""
-                CREATE INDEX IF NOT EXISTS idx_materials_name 
-                ON materials_23met(material_name)
+                CREATE INDEX IF NOT EXISTS idx_materials_гост 
+                ON materials_23met(гост)
             """)
             cursor.execute("""
-                CREATE INDEX IF NOT EXISTS idx_materials_size 
-                ON materials_23met(size)
+                CREATE INDEX IF NOT EXISTS idx_materials_класс 
+                ON materials_23met(класс)
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_materials_диаметр 
+                ON materials_23met(диаметр)
             """)
             cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_categories_name 
@@ -110,11 +144,27 @@ def create_tables():
             print("Таблицы созданы успешно")
 
 
-def get_page_content(url: str, retries: int = MAX_RETRIES) -> Optional[BeautifulSoup]:
+def get_page_content(url: str, referer: Optional[str] = None, retries: int = MAX_RETRIES) -> Optional[BeautifulSoup]:
     """Получение содержимого страницы с повторными попытками"""
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        'Host': '23met.ru',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:144.0) Gecko/20100101 Firefox/144.0',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3',
+        'Accept-Encoding': 'gzip, deflate, br, zstd',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'same-origin',
+        'Sec-Fetch-User': '?1',
+        'Priority': 'u=0, i',
+        'Cookie': 'banners_top_current_id=liskitrybprom_992_M; banners_bottom_current_id=rapid_M_2021; usrhash=35dd0be30b84c07d1783632ba096784613150ddfa5827a5c5c657d58776a0385; PHPSESSID=vthbj31urnn234a3148rscovk6'
     }
+    
+    # Добавляем Referer, если он указан
+    if referer:
+        headers['Referer'] = referer
     
     for attempt in range(retries):
         try:
@@ -132,7 +182,7 @@ def get_page_content(url: str, retries: int = MAX_RETRIES) -> Optional[Beautiful
     return None
 
 
-def extract_links(soup: BeautifulSoup, base_url: str) -> Set[str]:
+def extract_links(soup: BeautifulSoup, base_url: str, category_filter: Optional[str] = None) -> Set[str]:
     """Извлечение всех ссылок со страницы"""
     links = set()
     
@@ -143,7 +193,12 @@ def extract_links(soup: BeautifulSoup, base_url: str) -> Set[str]:
         
         # Фильтруем только ссылки на страницы справки
         if '/spravka/' in full_url and full_url.startswith(BASE_URL):
-            links.add(full_url)
+            # Если указан фильтр категории, применяем его
+            if category_filter:
+                if category_filter in full_url:
+                    links.add(full_url)
+            else:
+                links.add(full_url)
     
     return links
 
@@ -281,111 +336,143 @@ def save_material_data(category: str, page_url: str, tables_data: List[Dict]):
                 rows = table_data.get('rows', [])
                 
                 # Сохраняем таблицу целиком
-                cursor.execute("""
-                    INSERT INTO material_tables (category, page_url, table_index, headers, rows)
-                    VALUES (%s, %s, %s, %s::jsonb, %s::jsonb)
-                """, (category, page_url, table_idx, 
-                      json.dumps(headers, ensure_ascii=False), 
-                      json.dumps(rows, ensure_ascii=False)))
+                try:
+                    cursor.execute("""
+                        INSERT INTO material_tables (category, page_url, table_index, headers, rows)
+                        VALUES (%s, %s, %s, %s::jsonb, %s::jsonb)
+                    """, (category, page_url, table_idx, 
+                          json.dumps(headers, ensure_ascii=False), 
+                          json.dumps(rows, ensure_ascii=False)))
+                except Exception as e:
+                    print(f"Ошибка при сохранении таблицы {table_idx} со страницы {page_url}: {e}")
+                    continue
                 
-                # Пытаемся извлечь структурированные данные из таблицы
+                # Извлекаем только необходимые поля: Наименование, ГОСТ, Класс, Диаметр, Номинальная масса 1 метра
                 if rows:
-                    # Определяем тип материала из URL или заголовков
-                    material_name = category
-                    
-                    # Пытаемся найти стандартные колонки
                     for row in rows:
                         material_data = {
-                            'category': category,
-                            'material_name': material_name,
-                            'size': None,
-                            'diameter': None,
-                            'weight_per_meter': None,
-                            'cross_section_area': None,
-                            'gost': None,
-                            'url': page_url,
-                            'page_url': page_url,
-                            'raw_data': row
+                            'наименование': None,
+                            'гост': None,
+                            'класс': None,
+                            'диаметр': None,
+                            'номинальная_масса_1_метра': None,
+                            'page_url': page_url
                         }
                         
-                        # Ищем известные поля в данных строки
+                        # Ищем нужные поля в данных строки
                         for key, value in row.items():
-                            key_lower = key.lower()
+                            key_lower = key.lower().strip()
                             value_str = str(value).strip()
                             
                             if not value_str:
                                 continue
                             
-                            # Определение диаметра
-                            if any(term in key_lower for term in ['диаметр', 'diameter', 'd, мм', 'd']):
-                                material_data['diameter'] = value_str
-                            
-                            # Определение размера
-                            if any(term in key_lower for term in ['размер', 'size', 'номер', 'профиль']):
-                                material_data['size'] = value_str
-                            
-                            # Определение веса
-                            if any(term in key_lower for term in ['вес', 'weight', 'масса', 'кг/м', 'кг/м2']):
-                                # Извлекаем числовое значение
-                                numbers = re.findall(r'\d+\.?\d*', value_str)
-                                if numbers:
-                                    try:
-                                        material_data['weight_per_meter'] = float(numbers[0])
-                                    except ValueError:
-                                        pass
-                            
-                            # Определение площади сечения
-                            if any(term in key_lower for term in ['площадь', 'area', 'сечение', 'см2']):
-                                numbers = re.findall(r'\d+\.?\d*', value_str)
-                                if numbers:
-                                    try:
-                                        material_data['cross_section_area'] = float(numbers[0])
-                                    except ValueError:
-                                        pass
+                            # Определение наименования
+                            if any(term in key_lower for term in ['наименование', 'название', 'имя', 'name', 'назв']):
+                                material_data['наименование'] = value_str
                             
                             # Определение ГОСТ
-                            if 'гост' in key_lower or 'gost' in key_lower:
-                                material_data['gost'] = value_str
+                            elif any(term in key_lower for term in ['гост', 'gost', 'стандарт']):
+                                material_data['гост'] = value_str
+                            
+                            # Определение класса (А500С, А240 и т.д.)
+                            elif any(term in key_lower for term in ['класс', 'class', 'марка']):
+                                # Ищем классы типа А500С, А240, А400 и т.д.
+                                class_match = re.search(r'А\d{3}[А-Я]?', value_str, re.IGNORECASE)
+                                if class_match:
+                                    material_data['класс'] = class_match.group(0).upper()
+                                else:
+                                    # Если не найдено по паттерну, берем значение как есть
+                                    material_data['класс'] = value_str
+                            
+                            # Определение диаметра
+                            elif any(term in key_lower for term in ['диаметр', 'diameter', 'd, мм', 'd', 'd мм']):
+                                # Извлекаем числовое значение диаметра
+                                diameter_match = re.search(r'\d+\.?\d*', value_str)
+                                if diameter_match:
+                                    material_data['диаметр'] = diameter_match.group(0)
+                                else:
+                                    material_data['диаметр'] = value_str
+                            
+                            # Определение номинальной массы 1 метра
+                            elif any(term in key_lower for term in ['номинальная масса', 'масса 1 м', 'масса 1м', 
+                                                                     'вес 1 м', 'вес 1м', 'кг/м', 'кг/м.', 'масса, кг/м',
+                                                                     'масса', 'вес']):
+                                # Извлекаем числовое значение массы
+                                mass_match = re.search(r'\d+\.?\d*', value_str.replace(',', '.'))
+                                if mass_match:
+                                    try:
+                                        material_data['номинальная_масса_1_метра'] = float(mass_match.group(0))
+                                    except ValueError:
+                                        pass
                         
-                        # Сохраняем материал, если есть хотя бы одно поле
-                        if material_data['size'] or material_data['diameter']:
-                            try:
-                                cursor.execute("""
-                                    INSERT INTO materials_23met 
-                                    (category, material_name, size, diameter, weight_per_meter, 
-                                     cross_section_area, gost, url, page_url, raw_data)
-                                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s::jsonb)
-                                    ON CONFLICT (category, material_name, size, diameter, url) DO UPDATE
-                                    SET weight_per_meter = EXCLUDED.weight_per_meter,
-                                        cross_section_area = EXCLUDED.cross_section_area,
-                                        gost = EXCLUDED.gost,
-                                        raw_data = EXCLUDED.raw_data
-                                """, (
-                                    material_data['category'],
-                                    material_data['material_name'],
-                                    material_data['size'],
-                                    material_data['diameter'],
-                                    material_data['weight_per_meter'],
-                                    material_data['cross_section_area'],
-                                    material_data['gost'],
-                                    material_data['url'],
-                                    material_data['page_url'],
-                                    json.dumps(material_data['raw_data'], ensure_ascii=False)
-                                ))
-                            except Exception as e:
-                                print(f"Ошибка при сохранении материала: {e}")
-                                print(f"Данные: {material_data}")
+                        # Дополнительная проверка: если класс не найден в отдельной колонке, ищем в других полях
+                        if not material_data['класс']:
+                            # Ищем класс в наименовании или других полях
+                            all_text = ' '.join([str(v) for v in row.values() if v])
+                            class_match = re.search(r'А\d{3}[А-Я]?', all_text, re.IGNORECASE)
+                            if class_match:
+                                material_data['класс'] = class_match.group(0).upper()
+                        
+                        # Фильтруем некорректные данные: пропускаем строки, где слишком много данных в одном поле
+                        # (это обычно означает, что парсер неправильно извлек данные)
+                        skip_row = False
+                        for key, value in row.items():
+                            if isinstance(value, str) and len(value) > 500:
+                                # Слишком длинное значение - вероятно, это объединенные данные
+                                skip_row = True
+                                break
+                        
+                        # Пропускаем строки без минимально необходимых данных
+                        if skip_row or (not material_data['диаметр'] and not material_data['наименование']):
+                            continue
+                        
+                        # Ограничиваем длину полей для безопасности
+                        if material_data['наименование'] and len(material_data['наименование']) > 1000:
+                            material_data['наименование'] = material_data['наименование'][:1000]
+                        if material_data['гост'] and len(material_data['гост']) > 500:
+                            material_data['гост'] = material_data['гост'][:500]
+                        
+                        # Сохраняем материал, если есть хотя бы диаметр или наименование
+                        try:
+                            cursor.execute("""
+                                INSERT INTO materials_23met 
+                                (наименование, гост, класс, диаметр, номинальная_масса_1_метра, page_url)
+                                VALUES (%s, %s, %s, %s, %s, %s)
+                                ON CONFLICT (наименование, гост, класс, диаметр, номинальная_масса_1_метра, page_url) DO UPDATE
+                                SET наименование = EXCLUDED.наименование,
+                                    гост = EXCLUDED.гост,
+                                    класс = EXCLUDED.класс,
+                                    диаметр = EXCLUDED.диаметр,
+                                    номинальная_масса_1_метра = EXCLUDED.номинальная_масса_1_метра
+                            """, (
+                                material_data['наименование'],
+                                material_data['гост'],
+                                material_data['класс'],
+                                material_data['диаметр'],
+                                material_data['номинальная_масса_1_метра'],
+                                material_data['page_url']
+                            ))
+                        except Exception as e:
+                            print(f"Ошибка при сохранении материала: {e}")
+                            print(f"Данные: {material_data}")
+                            # Не выводим всю строку, если она слишком длинная
+                            if len(str(row)) < 500:
+                                print(f"Строка: {row}")
+                            continue
 
 
-def parse_page(url: str, category_name: str, visited: Set[str], parent_category: Optional[str] = None):
+def parse_page(url: str, category_name: str, visited: Set[str], parent_category: Optional[str] = None, referer: Optional[str] = None):
     """Рекурсивный парсинг страницы"""
     if url in visited:
         return
     
     visited.add(url)
     print(f"\nПарсинг страницы: {url}")
+    if referer:
+        print(f"Referer: {referer}")
     
-    soup = get_page_content(url)
+    soup = get_page_content(url, referer=referer)
     if not soup:
         print(f"Не удалось загрузить страницу: {url}")
         return
@@ -400,8 +487,9 @@ def parse_page(url: str, category_name: str, visited: Set[str], parent_category:
         print(f"Найдено таблиц: {len(tables_data)}")
         save_material_data(category_name, url, tables_data)
     
-    # Извлекаем ссылки для дальнейшего обхода
-    links = extract_links(soup, url)
+    # Извлекаем ссылки для дальнейшего обхода (только для арматуры А3)
+    category_filter = 'armatura_a3' if 'armatura_a3' in url else None
+    links = extract_links(soup, url, category_filter)
     
     # Определяем название категории из URL или заголовка страницы
     title = soup.find('title')
@@ -420,8 +508,8 @@ def parse_page(url: str, category_name: str, visited: Set[str], parent_category:
             # Задержка между запросами
             time.sleep(DELAY_BETWEEN_REQUESTS)
             
-            # Рекурсивный вызов
-            parse_page(link, link_category, visited, category_name)
+            # Рекурсивный вызов с передачей текущего URL как referer
+            parse_page(link, link_category, visited, category_name, referer=url)
     
     print(f"Завершен парсинг страницы: {url}")
 
@@ -462,7 +550,7 @@ def main():
     visited = set()
     
     try:
-        parse_page(start_url, category_name, visited)
+        parse_page(start_url, category_name, visited, referer=None)
         print(f"\n\nПарсинг завершен!")
         print(f"Всего обработано страниц: {len(visited)}")
         
@@ -477,11 +565,21 @@ def main():
                 cursor.execute("SELECT COUNT(*) FROM material_categories")
                 categories_count = cursor.fetchone()[0]
                 
+                # Статистика по классам
+                cursor.execute("SELECT COUNT(DISTINCT класс) FROM materials_23met WHERE класс IS NOT NULL")
+                classes_count = cursor.fetchone()[0]
+                
+                # Статистика по диаметрам
+                cursor.execute("SELECT COUNT(DISTINCT диаметр) FROM materials_23met WHERE диаметр IS NOT NULL")
+                diameters_count = cursor.fetchone()[0]
+                
                 print(f"\nСтатистика:")
                 print(f"  - Категорий: {categories_count}")
                 print(f"  - Материалов: {materials_count}")
                 print(f"  - Таблиц: {tables_count}")
+                print(f"  - Уникальных классов: {classes_count}")
                 
+                print(f"  - Уникальных диаметров: {diameters_count}")
     except KeyboardInterrupt:
         print("\n\nПарсинг прерван пользователем")
         print(f"Обработано страниц до прерывания: {len(visited)}")

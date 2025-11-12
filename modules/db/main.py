@@ -1,7 +1,7 @@
 import os
 from datetime import date, datetime
 from decimal import Decimal
-from typing import List, Optional
+from typing import List
 
 import psycopg2
 from dotenv import load_dotenv
@@ -44,7 +44,7 @@ class ColumnInfo(BaseModel):
     name: str
     type: str
     nullable: bool
-    default: Optional[str]
+    default: str | None
 
 
 class QueryRequest(BaseModel):
@@ -195,7 +195,10 @@ async def get_table_data(table_name: str, limit: int = 100):
 
 
 @app.get("/api/search_materials")
-async def search_materials(terms: str = Query(..., description="Термины для поиска через запятую")):
+async def search_materials(
+    terms: str = Query(..., description="Термины для поиска через запятую"),
+    tables: str | None = Query(None, description="Таблицы для поиска через запятую (опционально)")
+):
     """Поиск материалов по ключевым словам во всех текстовых колонках"""
     try:
         # Разбиваем строку терминов на список
@@ -209,27 +212,49 @@ async def search_materials(terms: str = Query(..., description="Термины �
             conn.autocommit = True
             results = []
 
-            # Получаем все таблицы
+            # Получаем список таблиц для поиска
             with conn.cursor() as cursor:
-                cursor.execute("""
-                    SELECT table_name
-                      FROM information_schema.tables
-                     WHERE table_schema = 'public'
-                       AND table_type = 'BASE TABLE'
-                     ORDER BY table_name
-                """)
-                table_rows = cursor.fetchall()
-                print(f"[DEBUG] Raw table rows: {table_rows}")
-                tables = []
-                for row in table_rows:
-                    if isinstance(row, (tuple, list)) and len(row) > 0:
-                        tables.append(str(row[0]))
+                if tables:
+                    # Если указаны конкретные таблицы, используем их
+                    table_list = [t.strip() for t in tables.split(",") if t.strip()]
+                    if not table_list:
+                        tables_to_search = []
                     else:
-                        print(f"[WARNING] Invalid table row: {row}")
-                print(f"[DEBUG] Searching in {len(tables)} tables: {tables}")
+                        # Проверяем существование таблиц безопасным способом
+                        # Используем параметризованный запрос
+                        placeholders = ','.join(['%s'] * len(table_list))
+                        query = f"""
+                            SELECT table_name
+                              FROM information_schema.tables
+                             WHERE table_schema = 'public'
+                               AND table_type = 'BASE TABLE'
+                               AND table_name IN ({placeholders})
+                             ORDER BY table_name
+                        """
+                        cursor.execute(query, tuple(table_list))
+                        table_rows = cursor.fetchall()
+                        tables_to_search = [str(row[0]) for row in table_rows if isinstance(row, (tuple, list)) and len(row) > 0]
+                    print(f"[DEBUG] Searching in specified {len(tables_to_search)} tables: {tables_to_search}")
+                else:
+                    # Если таблицы не указаны, ищем во всех
+                    cursor.execute("""
+                        SELECT table_name
+                          FROM information_schema.tables
+                         WHERE table_schema = 'public'
+                           AND table_type = 'BASE TABLE'
+                         ORDER BY table_name
+                    """)
+                    table_rows = cursor.fetchall()
+                    tables_to_search = []
+                    for row in table_rows:
+                        if isinstance(row, (tuple, list)) and len(row) > 0:
+                            tables_to_search.append(str(row[0]))
+                        else:
+                            print(f"[WARNING] Invalid table row: {row}")
+                    print(f"[DEBUG] Searching in all {len(tables_to_search)} tables: {tables_to_search}")
 
             # Для каждой таблицы находим текстовые колонки и ищем совпадения
-            for table_name in tables:
+            for table_name in tables_to_search:
                 try:
                     print(f"[DEBUG] Processing table: {
                           table_name} (type: {type(table_name)})")

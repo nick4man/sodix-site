@@ -10,6 +10,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ApiService } from '../../api.service';
 import { SearchResult } from '../../models/search-result.model';
 import { HighlightPipe } from '../../pipe/highlight.pipe';
@@ -36,6 +38,8 @@ interface ExtendedSearchResult extends SearchResult {
     MatButtonModule,
     MatProgressSpinnerModule,
     MatTableModule,
+    MatSelectModule,
+    MatCheckboxModule,
     HighlightPipe,
   ],
   templateUrl: './search-materials.component.html',
@@ -44,7 +48,13 @@ interface ExtendedSearchResult extends SearchResult {
 export class SearchMaterialsComponent implements OnInit {
   // Чипы с терминами
   termCtrl = new FormControl();
+  tableCtrl = new FormControl<string[]>([]);
   terms: string[] = ['арматура', 'труба', 'балка', 'швеллер', 'уголок', 'лист'];
+
+  // Список таблиц
+  availableTables: { name: string; columns: number }[] = [];
+  selectedTables: string[] = [];
+  searchAllTables = true;
 
   // Результаты поиска
   results: ExtendedSearchResult[] = [];
@@ -52,9 +62,38 @@ export class SearchMaterialsComponent implements OnInit {
   isLoading = false;
   error: string | null = null;
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.loadTables();
+  }
+
+  // Загрузка списка таблиц
+  loadTables(): void {
+    this.api.getTables().subscribe({
+      next: (tables) => {
+        this.availableTables = tables;
+        console.log('Загружены таблицы:', tables);
+      },
+      error: (err) => {
+        console.error('Ошибка загрузки таблиц:', err);
+      },
+    });
+  }
+
+  // Обработка изменения выбора таблиц
+  onTableSelectionChange(selected: string[] | null): void {
+    if (selected === null || selected.length === 0) {
+      // Если выбран "Все таблицы" или ничего не выбрано
+      this.searchAllTables = true;
+      this.selectedTables = [];
+      this.tableCtrl.setValue([]);
+    } else {
+      // Если выбраны конкретные таблицы
+      this.searchAllTables = false;
+      this.selectedTables = selected.filter(t => t !== null);
+    }
+  }
 
   // Удалить термин из списка
   removeTerm(term: string): void {
@@ -75,13 +114,16 @@ export class SearchMaterialsComponent implements OnInit {
   // Кнопка «Найти»
   search(): void {
     console.log('Поиск с терминами:', this.terms);
+    console.log('Выбранные таблицы:', this.searchAllTables ? 'Все' : this.selectedTables);
     if (this.terms.length === 0) {
       console.warn('Нет терминов для поиска');
       return;
     }
     this.isLoading = true;
     this.error = null;
-    this.api.searchMaterials(this.terms).subscribe({
+
+    const tablesToSearch = this.searchAllTables ? undefined : this.selectedTables;
+    this.api.searchMaterials(this.terms, tablesToSearch).subscribe({
       next: (data: ExtendedSearchResult[]) => {
         console.log('Результаты поиска:', data);
         this.results = data;
